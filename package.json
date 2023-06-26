@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:new": "node --watch dist/index.js",
-    "server": "cross-env DEBUG=W7* nodemon dist/index.js",
+    "server": "cross-env DEBUG=FP* nodemon dist/index.js",
     "server2": "nodemon dist/index.js",
     "build": "tsc --watch",
     "build:prod": "tsc",
@@ -51,8 +51,6 @@
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "express-validation": "^4.1.0",
-    "inquirer": "^9.2.7",
-    "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.4",
     "morgan": "^1.10.0",
