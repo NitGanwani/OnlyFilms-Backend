@@ -2,6 +2,6 @@ import mongoose from 'mongoose';
 import { user, passwd, db } from '../config.js';
 
 export const dbConnect = () => {
-  const uri = `mongodb+srv://${user}:${passwd}@cluster0.pzctaqf.mongodb.net/${db}?retryWrites=true&w=majority`;
+  const uri = `mongodb+srv://${user}:${passwd}@cluster0.d9popsr.mongodb.net/${db}?retryWrites=true&w=majority`;
   return mongoose.connect(uri);
 };
