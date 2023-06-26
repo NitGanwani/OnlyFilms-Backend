@@ -3,7 +3,6 @@ import { UserRepo } from '../repository/user.m.repository.js';
 import { AuthServices, PayloadToken } from '../services/auth.js';
 import { HttpError } from '../types/http.error.js';
 import { LoginResponse } from '../types/response.api.js';
-
 import createDebug from 'debug';
 import { Controller } from './controller.js';
 import { User } from '../entities/user.js';
@@ -18,8 +17,8 @@ export class UserController extends Controller<User> {
 
   async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const passwd = await AuthServices.hash(req.body.passwd);
-      req.body.passwd = passwd;
+      const passwd = await AuthServices.hash(req.body.password);
+      req.body.password = passwd;
       res.status(201);
       res.send(await this.repo.create(req.body));
     } catch (error) {
@@ -29,7 +28,7 @@ export class UserController extends Controller<User> {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      if (!req.body.user || !req.body.passwd) {
+      if (!req.body.user || !req.body.password) {
         throw new HttpError(400, 'Bad request', 'User or password invalid (1)');
       }
 
@@ -49,7 +48,7 @@ export class UserController extends Controller<User> {
       }
 
       const isUserValid = await AuthServices.compare(
-        req.body.passwd,
+        req.body.password,
         data[0].password
       );
 
