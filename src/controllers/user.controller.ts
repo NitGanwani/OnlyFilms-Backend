@@ -28,10 +28,8 @@ export class UserController extends Controller<User> {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      if (!req.body.user || !req.body.password) {
-        throw new HttpError(400, 'Bad request', 'User or password invalid (1)');
-      }
-
+      if (!req.body.user || !req.body.password)
+        throw new HttpError(400, 'Bad Request', 'Invalid user or password');
       let data = await this.repo.search({
         key: 'userName',
         value: req.body.user,
@@ -43,18 +41,16 @@ export class UserController extends Controller<User> {
         });
       }
 
-      if (!data.length) {
-        throw new HttpError(400, 'Bad request', 'User or password invalid (2)');
-      }
+      if (!data.length)
+        throw new HttpError(400, 'Bad Request', 'Invalid user or password');
 
       const isUserValid = await AuthServices.compare(
         req.body.password,
         data[0].password
       );
 
-      if (!isUserValid) {
-        throw new HttpError(400, 'Bad request', 'User or password invalid (3)');
-      }
+      if (!isUserValid)
+        throw new HttpError(400, 'Bad Request', 'Invalid user or password');
 
       const payload: PayloadToken = {
         id: data[0].id,
@@ -65,6 +61,7 @@ export class UserController extends Controller<User> {
         token,
         user: data[0],
       };
+
       res.send(response);
     } catch (error) {
       next(error);
