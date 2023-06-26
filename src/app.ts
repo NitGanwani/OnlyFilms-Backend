@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { userRouter } from './routers/user.router.js';
 import createDebug from 'debug';
-import { errorHandler } from './middleware/error.js';
+import { handleError } from './middleware/error.js';
 const debug = createDebug('FP:App');
 
 export const app = express();
@@ -25,4 +25,4 @@ app.get('/', (_req, res) => {
 
 app.use('/user', userRouter);
 
-app.use(errorHandler);
+app.use(handleError);

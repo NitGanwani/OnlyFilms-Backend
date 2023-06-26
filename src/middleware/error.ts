@@ -1,12 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../types/http.error.js';
 import mongoose, { mongo } from 'mongoose';
-import { ValidationError } from 'express-validation';
-
 import createDebug from 'debug';
-const debug = createDebug('FP:ErrorMiddleware');
+const debug = createDebug('W7:');
 
-export const errorHandler = (
+export const handleError = (
   error: Error,
   _req: Request,
   res: Response,
@@ -19,17 +17,17 @@ export const errorHandler = (
     res.status(error.status);
     res.statusMessage = error.message;
     res.send({
-      status: error.status + ' ' + error.statusMessage,
+      status: error.status,
     });
     return;
   }
 
   if (error instanceof mongoose.Error.ValidationError) {
-    console.error('400 Bad request', error.message);
+    console.error('400 Bad Request', error.message);
     res.status(400);
     res.statusMessage = 'Bad Request';
     res.send({
-      status: '400 Bad request',
+      status: '400 Bad Request',
     });
     return;
   }
@@ -40,15 +38,6 @@ export const errorHandler = (
     res.statusMessage = 'Not accepted';
     res.send({
       status: '406 Not accepted',
-    });
-    return;
-  }
-
-  if (error instanceof ValidationError) {
-    res.status(error.statusCode);
-    res.statusMessage = error.error;
-    res.send({
-      status: error.statusCode + ' ' + error.error,
     });
     return;
   }
