@@ -128,7 +128,7 @@ describe('Given the UserRepo class', () => {
     test('Then it should throw an error', async () => {
       const repo = new UserRepo();
       const error = new HttpError(404, 'Not found', 'Bad id for the delete');
-      const mockId = '1';
+      const mockId = '2';
       const exec = jest.fn().mockResolvedValueOnce(null);
       UserModel.findByIdAndDelete = jest.fn().mockReturnValueOnce({
         exec,
