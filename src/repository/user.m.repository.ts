@@ -13,14 +13,14 @@ export class UserRepo implements Repository<User> {
   }
 
   async query(): Promise<User[]> {
-    const aData = await UserModel.find().exec();
-    return aData;
+    const allData = await UserModel.find().exec();
+    return allData;
   }
 
   async queryById(id: string): Promise<User> {
     const result = await UserModel.findById(id).exec();
     if (result === null)
-      throw new HttpError(404, 'Not found', 'Bad id for the query');
+      throw new HttpError(404, 'Not found', 'No user found with this id');
     return result;
   }
 
