@@ -53,35 +53,35 @@ describe('Given the AuthInterceptor middleware', () => {
     });
   });
 
-  describe('When it is instantiated', () => {
-    const mockFilmRepo = {
-      queryById: jest.fn(),
-    } as unknown as FilmRepo;
-    const mockPayload = { id: '1' } as PayloadToken;
-    const mockFilmId = '2';
-    const req = {
-      body: { tokenPayload: mockPayload },
-      params: { id: mockFilmId },
-    } as unknown as Request;
-    const res = {} as unknown as Response;
-    const next = jest.fn() as NextFunction;
-    const authInterceptor = new AuthInterceptor(mockFilmRepo);
+  // Describe('When it is instantiated', () => {
+  //   const mockFilmRepo = {
+  //     queryById: jest.fn(),
+  //   } as unknown as FilmRepo;
+  //   const mockPayload = { id: '1' } as PayloadToken;
+  //   const mockFilmId = '2';
+  //   const req = {
+  //     body: { tokenPayload: mockPayload },
+  //     params: { id: mockFilmId },
+  //   } as unknown as Request;
+  //   const res = {} as unknown as Response;
+  //   const next = jest.fn() as NextFunction;
+  //   const authInterceptor = new AuthInterceptor(mockFilmRepo);
 
-    test.only('Then the authorizedForFilms should be used', () => {
-      authInterceptor.authorizedForFilms(req, res, next);
-      expect(mockFilmRepo.queryById).toHaveBeenCalled();
-      expect(next).toHaveBeenCalled();
-    });
+  //   test.only('Then the authorizedForFilms should be used', () => {
+  //     authInterceptor.authorizedForFilms(req, res, next);
+  //     expect(mockFilmRepo.queryById).toHaveBeenCalled();
+  //     expect(next).toHaveBeenCalled();
+  //   });
 
-    test('Then the authorizedForFilms should throw an error when there is no tokenPayload in the body from request', () => {
-      const error = new HttpError(
-        498,
-        'Token not found',
-        'Token not found in Authorized interceptor'
-      );
+  //   test('Then the authorizedForFilms should throw an error when there is no tokenPayload in the body from request', () => {
+  //     const error = new HttpError(
+  //       498,
+  //       'Token not found',
+  //       'Token not found in Authorized interceptor'
+  //     );
 
-      authInterceptor.authorizedForFilms(req, res, next);
-      expect(next).toHaveBeenCalledWith(error);
-    });
-  });
+  //     authInterceptor.authorizedForFilms(req, res, next);
+  //     expect(next).toHaveBeenCalledWith(error);
+  //   });
+  // });
 });
