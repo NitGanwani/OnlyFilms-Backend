@@ -1,8 +1,8 @@
 import createDebug from 'debug';
-import { Repository } from './repository';
-import { Film } from '../entities/film';
-import { FilmModel } from './film.m.model';
-import { HttpError } from '../types/http.error';
+import { Repository } from './repository.js';
+import { Film } from '../entities/film.js';
+import { FilmModel } from './film.m.model.js';
+import { HttpError } from '../types/http.error.js';
 
 const debug = createDebug('FP:FilmRepo');
 

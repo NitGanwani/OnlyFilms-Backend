@@ -1,8 +1,8 @@
 import createDebug from 'debug';
-import { FilmRepo } from '../repository/film.m.repository';
+import { FilmRepo } from '../repository/film.m.repository.js';
 import { Request, Response, NextFunction } from 'express';
-import { HttpError } from '../types/http.error';
-import { AuthServices, PayloadToken } from '../services/auth';
+import { HttpError } from '../types/http.error.js';
+import { AuthServices, PayloadToken } from '../services/auth.js';
 
 const debug = createDebug('FP:AuthInterceptor');
 

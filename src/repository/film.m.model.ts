@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Film } from '../entities/film';
+import { Film } from '../entities/film.js';
 
 const filmSchema = new Schema<Film>({
   title: {

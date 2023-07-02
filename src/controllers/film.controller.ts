@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import createDebug from 'debug';
-import { Controller } from './controller';
-import { Film } from '../entities/film';
-import { FilmRepo } from '../repository/film.m.repository';
-import { UserRepo } from '../repository/user.m.repository';
+import { Controller } from './controller.js';
+import { Film } from '../entities/film.js';
+import { FilmRepo } from '../repository/film.m.repository.js';
+import { UserRepo } from '../repository/user.m.repository.js';
 import { NextFunction, Request, Response } from 'express';
-import { PayloadToken } from '../services/auth';
+import { PayloadToken } from '../services/auth.js';
 
 const debug = createDebug('FP:FilmController');
 
