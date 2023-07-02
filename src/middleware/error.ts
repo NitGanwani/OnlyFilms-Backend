@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../types/http.error.js';
 import mongoose, { mongo } from 'mongoose';
 import createDebug from 'debug';
-const debug = createDebug('W7:');
+const debug = createDebug('FP:Error Middleware');
 
 export const handleError = (
   error: Error,
