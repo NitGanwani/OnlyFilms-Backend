@@ -10,7 +10,7 @@ import { PayloadToken } from '../services/auth.js';
 const debug = createDebug('FP:FilmController');
 
 export class FilmController extends Controller<Film> {
-  constructor(protected filmRepo: FilmRepo, private userRepo: UserRepo) {
+  constructor(public repo: FilmRepo, private userRepo: UserRepo) {
     super();
     debug('Instantiated');
   }
@@ -21,7 +21,7 @@ export class FilmController extends Controller<Film> {
       const user = await this.userRepo.queryById(userId);
       delete req.body.tokenPayload;
       req.body.owner = userId;
-      const newFilm = await this.filmRepo.create(req.body);
+      const newFilm = await this.repo.create(req.body);
       user.films.push(newFilm);
       this.userRepo.update(user.id, user);
       res.status(201);

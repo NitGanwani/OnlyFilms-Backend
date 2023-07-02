@@ -8,7 +8,7 @@ const debug = createDebug('FP:AuthInterceptor');
 
 export class AuthInterceptor {
   // eslint-disable-next-line no-unused-vars
-  constructor(private filmRepo: FilmRepo) {
+  constructor(protected filmRepo: FilmRepo) {
     debug('Instantiated');
   }
 
