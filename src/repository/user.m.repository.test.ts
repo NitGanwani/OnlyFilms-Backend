@@ -1,3 +1,4 @@
+import { Film } from '../entities/film.js';
 import { User } from '../entities/user.js';
 import { HttpError } from '../types/http.error.js';
 import { UserModel } from './user.m.model.js';
@@ -43,6 +44,7 @@ describe('Given the UserRepo class', () => {
         userName: 'Nitin',
         email: 'nitin@email.com',
         password: '',
+        films: [] as Film[],
       };
 
       UserModel.create = jest.fn().mockReturnValueOnce(mockUser);
