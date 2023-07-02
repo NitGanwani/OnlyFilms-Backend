@@ -32,7 +32,6 @@ const filmSchema = new Schema<Film>({
       size: { type: Number },
     },
     required: true,
-    unique: true,
   },
   owner: {
     type: Schema.Types.ObjectId,

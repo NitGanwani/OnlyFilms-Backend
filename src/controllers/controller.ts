@@ -3,7 +3,7 @@ import { Repository } from '../repository/repository.js';
 import { ApiResponse } from '../types/response.api.js';
 
 export abstract class Controller<T extends { id: string | number }> {
-  protected repo!: Repository<T>;
+  public repo!: Repository<T>;
 
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {

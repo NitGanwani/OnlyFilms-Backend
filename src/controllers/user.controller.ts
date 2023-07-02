@@ -10,7 +10,7 @@ const debug = createDebug('FP:UserController');
 
 export class UserController extends Controller<User> {
   // eslint-disable-next-line no-unused-vars
-  constructor(protected repo: UserRepo) {
+  constructor(public repo: UserRepo) {
     super();
     debug('Instantiated');
   }
