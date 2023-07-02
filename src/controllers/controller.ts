@@ -28,15 +28,6 @@ export abstract class Controller<T extends { id: string | number }> {
     }
   }
 
-  async post(req: Request, res: Response, next: NextFunction) {
-    try {
-      res.status(201);
-      res.send(await this.repo.create(req.body));
-    } catch (error) {
-      next(error);
-    }
-  }
-
   async patch(req: Request, res: Response, next: NextFunction) {
     try {
       res.status(202);
