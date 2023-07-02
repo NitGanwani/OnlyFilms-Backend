@@ -34,6 +34,7 @@ export class UserController extends Controller<User> {
         key: 'userName',
         value: req.body.user,
       });
+
       if (!data.length) {
         data = await this.repo.search({
           key: 'email',
