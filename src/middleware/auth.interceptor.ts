@@ -37,7 +37,7 @@ export class AuthInterceptor {
     }
   }
 
-  async authorizedForBooks(req: Request, res: Response, next: NextFunction) {
+  async authorizedForFilms(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.body.tokenPayload) {
         throw new HttpError(

@@ -4,6 +4,7 @@ import cors from 'cors';
 import { userRouter } from './routers/user.router.js';
 import createDebug from 'debug';
 import { handleError } from './middleware/error.js';
+import { filmRouter } from './routers/film.router.js';
 const debug = createDebug('FP:App');
 
 export const app = express();
@@ -24,5 +25,6 @@ app.get('/', (_req, res) => {
 });
 
 app.use('/user', userRouter);
+app.use('/film', filmRouter);
 
 app.use(handleError);
