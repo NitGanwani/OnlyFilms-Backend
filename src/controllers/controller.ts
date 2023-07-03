@@ -13,7 +13,6 @@ export abstract class Controller<T extends { id: string | number }> {
         page: 1,
         count: items.length,
       };
-      console.log(req.body);
       res.send(response);
     } catch (error) {
       next(error);

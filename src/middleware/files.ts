@@ -16,7 +16,6 @@ export class FileMiddleware {
       storage: multer.diskStorage({
         destination: 'uploads',
         filename(req, file, callback) {
-          console.log({ file });
           const suffix = crypto.randomUUID();
           const extension = path.extname(file.originalname);
           const basename = path.basename(file.originalname, extension);
