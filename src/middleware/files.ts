@@ -14,7 +14,7 @@ export class FileMiddleware {
   singleFileStore(fileName = 'file', fileSize = 8_000_000) {
     const upload = multer({
       storage: multer.diskStorage({
-        destination: 'uploads',
+        destination: 'public/uploads',
         filename(req, file, callback) {
           const suffix = crypto.randomUUID();
           const extension = path.extname(file.originalname);
@@ -38,8 +38,9 @@ export class FileMiddleware {
       if (!req.file)
         throw new HttpError(406, 'Not Acceptable', 'Not valid image file');
       const userImage = req.file.filename;
-      const imagePath = path.join('uploads', userImage);
-
+      const imagePath = `${req.protocol}://${req.get(
+        'host'
+      )}/uploads/${userImage}`;
       req.body[req.file.fieldname] = {
         urlOriginal: req.file.originalname,
         url: imagePath,

@@ -44,6 +44,7 @@ describe('Given a FileMiddleware class', () => {
     const next = jest.fn() as NextFunction;
 
     test('Then it should call next without parameters', async () => {
+      req.get = jest.fn().mockReturnValueOnce('host');
       const filesMiddleware = new FileMiddleware();
       await filesMiddleware.saveDataImage(req, resp, next);
       expect(next).toHaveBeenCalled();
