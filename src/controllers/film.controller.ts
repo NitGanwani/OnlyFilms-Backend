@@ -6,6 +6,7 @@ import { FilmRepo } from '../repository/film.m.repository.js';
 import { UserRepo } from '../repository/user.m.repository.js';
 import { NextFunction, Request, Response } from 'express';
 import { PayloadToken } from '../services/auth.js';
+import { ApiResponse } from '../types/response.api.js';
 
 const debug = createDebug('FP:FilmController');
 
@@ -26,6 +27,21 @@ export class FilmController extends Controller<Film> {
       this.userRepo.update(user.id, user);
       res.status(201);
       res.send(newFilm);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { offset } = req.query;
+      const films = await this.repo.query(Number(offset));
+      const response: ApiResponse = {
+        items: films.items,
+        page: films.page,
+        count: films.count,
+      };
+      res.send(response);
     } catch (error) {
       next(error);
     }

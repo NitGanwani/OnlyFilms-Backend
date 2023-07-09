@@ -3,6 +3,7 @@ import { Repository } from './repository.js';
 import { Film } from '../entities/film.js';
 import { FilmModel } from './film.m.model.js';
 import { HttpError } from '../types/http.error.js';
+import { ApiResponse } from '../types/response.api.js';
 
 const debug = createDebug('FP:FilmRepo');
 
@@ -11,11 +12,29 @@ export class FilmRepo implements Repository<Film> {
     debug('Instantiated');
   }
 
-  async query(): Promise<Film[]> {
-    const allData = await FilmModel.find()
+  async count(): Promise<number> {
+    const pageCount = await FilmModel.find().count();
+    return pageCount;
+  }
+
+  async query(offset = 0): Promise<ApiResponse> {
+    const limit = 6;
+
+    const items = await FilmModel.find()
       .populate('owner', { films: 0 })
+      .skip(offset * limit)
+      .limit(limit)
       .exec();
-    return allData;
+
+    const count = await this.count();
+
+    const response = {
+      items,
+      page: offset + 1,
+      count,
+    };
+
+    return response as ApiResponse;
   }
 
   async queryById(id: string): Promise<Film> {
