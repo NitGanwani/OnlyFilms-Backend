@@ -41,6 +41,10 @@ export class FileMiddleware {
       const imagePath = `${req.protocol}://${req.get(
         'host'
       )}/uploads/${userImage}`;
+
+      // Const firebase = new FireBase();
+      // const backupImage = await firebase.uploadFile(userImage);
+
       req.body[req.file.fieldname] = {
         urlOriginal: req.file.originalname,
         url: imagePath,

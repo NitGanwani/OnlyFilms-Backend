@@ -19,6 +19,12 @@ const userSchema = new Schema<User>({
     required: true,
     trim: true,
   },
+  films: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Film',
+    },
+  ],
 });
 
 userSchema.set('toJSON', {
@@ -26,7 +32,7 @@ userSchema.set('toJSON', {
     returnedObject.id = returnedObject._id;
     delete returnedObject.__v;
     delete returnedObject._id;
-    delete returnedObject.passwd;
+    delete returnedObject.password;
   },
 });
 
