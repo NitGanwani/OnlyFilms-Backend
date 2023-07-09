@@ -21,6 +21,7 @@ describe('Given the FilmController class', () => {
     const req = {
       params: { id: '1' },
       body: { tokenPayload: {} },
+      query: { offset: 1 },
     } as unknown as Request;
     const res = {
       send: jest.fn(),
@@ -80,6 +81,7 @@ describe('Given the FilmController class', () => {
     const newReq = {
       params: { id: '1' },
       body: { tokenPayload: {} },
+      query: { offset: '77' },
     } as unknown as Request;
     const newRes = {
       send: jest.fn(),
