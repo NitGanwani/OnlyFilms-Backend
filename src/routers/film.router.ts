@@ -31,6 +31,7 @@ filmRouter.post(
 );
 filmRouter.patch(
   '/:id',
+  fileStore.singleFileStore('poster').bind(fileStore),
   interceptor.logged.bind(interceptor),
   interceptor.authorizedForFilms.bind(interceptor),
   controller.patch.bind(controller)
