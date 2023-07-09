@@ -10,7 +10,7 @@ describe('Given the FilmController class', () => {
       update: jest.fn(),
     } as unknown as UserRepo;
     const mockFilmRepo = {
-      query: jest.fn().mockResolvedValue([]),
+      query: jest.fn().mockResolvedValue([{ id: '1', title: 'Snatch' }]),
       queryById: jest.fn().mockResolvedValue({ films: [] }),
       search: jest.fn(),
       create: jest.fn(),
@@ -31,9 +31,13 @@ describe('Given the FilmController class', () => {
     const controller = new FilmController(mockFilmRepo, mockUserRepo);
 
     test('Then the getAll method should be used', async () => {
+      const mockResponse = [{ id: '1', title: 'Snatch' }];
+
+      const result = await mockFilmRepo.query();
       await controller.getAll(req, res, next);
       expect(res.send).toHaveBeenCalled();
       expect(mockFilmRepo.query).toHaveBeenCalled();
+      expect(result).toEqual(mockResponse);
     });
 
     test('Then the getById method should be used', async () => {

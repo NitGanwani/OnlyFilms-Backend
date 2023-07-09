@@ -10,15 +10,20 @@ describe('Given the UserRepo class', () => {
   const repo = new UserRepo();
   describe('When it has been instantiated', () => {
     test('Then the query method should be used', async () => {
-      const mockData = [{}];
+      const mockData = [{ email: 'nitin@mail.com' }];
+      const mockResponse = { count: 1, items: mockData, page: 0 };
 
       const exec = jest.fn().mockResolvedValueOnce(mockData);
-      UserModel.find = jest.fn().mockReturnValueOnce({ exec });
+      UserModel.find = jest.fn().mockReturnValueOnce({
+        populate: jest.fn().mockReturnValueOnce({
+          exec,
+        }),
+      });
 
       const result = await repo.query();
       expect(UserModel.find).toHaveBeenCalled();
       expect(exec).toHaveBeenCalled();
-      expect(result).toEqual(mockData);
+      expect(result).toEqual(mockResponse);
     });
 
     test('Then the queryById method should be used', async () => {

@@ -14,5 +14,6 @@ export default {
     'src/repository/user.m.model.ts',
     'src/repository/film.m.model.ts',
     'src/routers/film.router.ts',
+    'src/controllers/controller.ts',
   ],
 };

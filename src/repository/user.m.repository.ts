@@ -3,8 +3,7 @@ import createDebug from 'debug';
 import { User } from '../entities/user.js';
 import { HttpError } from '../types/http.error.js';
 import { Repository } from './repository.js';
-
-// TEMP import { HttpError } from '../types/http.error.js';
+import { ApiResponse } from '../types/response.api.js';
 const debug = createDebug('FP:UserRepo');
 
 export class UserRepo implements Repository<User> {
@@ -12,9 +11,15 @@ export class UserRepo implements Repository<User> {
     debug('Instantiated', UserModel);
   }
 
-  async query(): Promise<User[]> {
-    const allData = await UserModel.find().exec();
-    return allData;
+  async query(): Promise<ApiResponse> {
+    const allData = await UserModel.find().populate('films', { id: 0 }).exec();
+
+    const response = {
+      items: allData,
+      page: 0,
+      count: allData.length,
+    };
+    return response;
   }
 
   async queryById(id: string): Promise<User> {
