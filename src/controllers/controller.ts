@@ -9,9 +9,9 @@ export abstract class Controller<T extends { id: string | number }> {
     try {
       const items = await this.repo.query();
       const response: ApiResponse = {
-        items,
+        items: items.items,
         page: 1,
-        count: items.length,
+        count: 0,
       };
       res.send(response);
     } catch (error) {
