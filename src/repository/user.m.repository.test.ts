@@ -11,7 +11,6 @@ describe('Given the UserRepo class', () => {
   describe('When it has been instantiated', () => {
     test('Then the query method should be used', async () => {
       const mockData = [{ email: 'nitin@mail.com' }];
-      const mockResponse = { count: 1, items: mockData, page: 0 };
 
       const exec = jest.fn().mockResolvedValueOnce(mockData);
       UserModel.find = jest.fn().mockReturnValueOnce({
@@ -23,7 +22,7 @@ describe('Given the UserRepo class', () => {
       const result = await repo.query();
       expect(UserModel.find).toHaveBeenCalled();
       expect(exec).toHaveBeenCalled();
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual(mockData);
     });
 
     test('Then the queryById method should be used', async () => {
@@ -91,6 +90,19 @@ describe('Given the UserRepo class', () => {
       });
       await repo.delete(mockId);
       expect(UserModel.findByIdAndDelete).toHaveBeenCalled();
+    });
+
+    test('Then the count method should be used', async () => {
+      const mockNumber = 7;
+      const exec = jest.fn().mockResolvedValueOnce(mockNumber);
+      UserModel.countDocuments = jest.fn().mockReturnValue({
+        exec,
+      });
+
+      const result = await repo.count();
+      expect(UserModel.countDocuments).toHaveBeenCalled();
+      expect(exec).toHaveBeenCalled();
+      expect(result).toBe(mockNumber);
     });
   });
 
