@@ -3,7 +3,6 @@ import { Repository } from './repository.js';
 import { Film } from '../entities/film.js';
 import { FilmModel } from './film.m.model.js';
 import { HttpError } from '../types/http.error.js';
-import { ApiResponse } from '../types/response.api.js';
 
 const debug = createDebug('FP:FilmRepo');
 
@@ -12,29 +11,30 @@ export class FilmRepo implements Repository<Film> {
     debug('Instantiated');
   }
 
-  async count(): Promise<number> {
-    const pageCount = await FilmModel.find().count();
-    return pageCount;
+  async query(page = 1, limit = 6, genre?: string): Promise<Film[]> {
+    page = Number(page as any);
+    limit = Number(limit as any);
+    const queryObj = {} as any;
+
+    if (genre) {
+      queryObj.genre = genre;
+    }
+
+    return FilmModel.find(queryObj)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate('owner')
+      .exec();
   }
 
-  async query(offset = 0): Promise<ApiResponse> {
-    const limit = 6;
+  async count(genre?: string): Promise<number> {
+    const queryObj = {} as any;
 
-    const items = await FilmModel.find()
-      .populate('owner', { films: 0 })
-      .skip(offset * limit)
-      .limit(limit)
-      .exec();
+    if (genre) {
+      queryObj.genre = genre;
+    }
 
-    const count = await this.count();
-
-    const response = {
-      items,
-      page: offset + 1,
-      count,
-    };
-
-    return response as ApiResponse;
+    return FilmModel.countDocuments(queryObj).exec();
   }
 
   async queryById(id: string): Promise<Film> {
