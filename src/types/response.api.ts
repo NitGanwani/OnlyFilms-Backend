@@ -2,8 +2,9 @@ import { User } from '../entities/user.js';
 
 export type ApiResponse = {
   count: number;
-  page: number;
   items: { [key: string]: unknown }[];
+  next: string | null;
+  previous: string | null;
 };
 
 export type LoginResponse = {

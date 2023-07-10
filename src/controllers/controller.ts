@@ -8,10 +8,9 @@ export abstract class Controller<T extends { id: string | number }> {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const items = await this.repo.query();
-      const response: ApiResponse = {
-        items: items.items,
-        page: 1,
-        count: 0,
+      const response: Partial<ApiResponse> = {
+        items,
+        count: await this.repo.count(),
       };
       res.send(response);
     } catch (error) {

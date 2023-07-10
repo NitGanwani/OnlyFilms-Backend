@@ -34,14 +34,63 @@ export class FilmController extends Controller<Film> {
 
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const { offset } = req.query;
-      const films = await this.repo.query(Number(offset));
-      const response: ApiResponse = {
-        items: films.items,
-        page: films.page,
-        count: films.count,
-      };
-      res.send(response);
+      const page = Number(req.query.page as string) || 1;
+      const limit = 6;
+      const genre = req.query.genre as string;
+
+      let items: Film[] = [];
+      let next = null;
+      let previous = null;
+      let baseUrl = '';
+
+      if (genre) {
+        items = await this.repo.query(page, limit, genre);
+
+        const totalCount = await this.repo.count(genre);
+
+        const totalPages = Math.ceil(totalCount / limit);
+
+        baseUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
+
+        if (page < totalPages) {
+          next = `${baseUrl}?genre=${genre}&page=${page + 1}`;
+        }
+
+        if (page > 1) {
+          previous = `${baseUrl}?genre=${genre}&page=${page - 1}`;
+        }
+
+        const response: ApiResponse = {
+          items,
+          count: await this.repo.count(genre),
+          previous,
+          next,
+        };
+        res.send(response);
+      } else {
+        items = await this.repo.query(page, limit);
+        const totalCount = await this.repo.count();
+
+        const totalPages = Math.ceil(totalCount / limit);
+
+        baseUrl = `${req.protocol}://${req.get('host')}${req.baseUrl}`;
+
+        if (page < totalPages) {
+          next = `${baseUrl}?page=${page + 1}`;
+        }
+
+        if (page > 1) {
+          previous = `${baseUrl}?page=${page - 1}`;
+        }
+
+        const response: ApiResponse = {
+          items,
+          count: await this.repo.count(),
+          previous,
+          next,
+        };
+        res.send(response);
+      }
     } catch (error) {
       next(error);
     }
