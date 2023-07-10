@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import createDebug from 'debug';
 import { NextFunction, Request, Response } from 'express';
 import { HttpError } from '../types/http.error.js';
+import { FireBase } from '../services/firebase.js';
 const debug = createDebug('FP:FileMiddleware');
 
 export class FileMiddleware {
@@ -29,7 +30,11 @@ export class FileMiddleware {
       },
     });
     const middleware = upload.single(fileName);
-    return middleware;
+    return (req: Request, res: Response, next: NextFunction) => {
+      const previousBody = req.body;
+      middleware(req, res, next);
+      req.body = { ...previousBody, ...req.body };
+    };
   }
 
   saveDataImage = async (req: Request, res: Response, next: NextFunction) => {
@@ -38,16 +43,13 @@ export class FileMiddleware {
       if (!req.file)
         throw new HttpError(406, 'Not Acceptable', 'Not valid image file');
       const userImage = req.file.filename;
-      const imagePath = `${req.protocol}://${req.get(
-        'host'
-      )}/uploads/${userImage}`;
+      const firebase = new FireBase();
 
-      // Const firebase = new FireBase();
-      // const backupImage = await firebase.uploadFile(userImage);
+      const backupImage = await firebase.uploadFile(userImage);
 
       req.body[req.file.fieldname] = {
         urlOriginal: req.file.originalname,
-        url: imagePath,
+        url: backupImage,
         mimetype: req.file.mimetype,
         size: req.file.size,
       };

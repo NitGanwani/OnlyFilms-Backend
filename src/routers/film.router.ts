@@ -22,15 +22,15 @@ filmRouter.get('/', controller.getAll.bind(controller));
 filmRouter.get('/:id', controller.getById.bind(controller));
 filmRouter.post(
   '/',
-  fileStore.singleFileStore('poster').bind(fileStore),
   interceptor.logged.bind(interceptor),
+  fileStore.singleFileStore('poster').bind(fileStore),
   fileStore.saveDataImage.bind(fileStore),
   controller.post.bind(controller)
 );
 filmRouter.patch(
   '/:id',
-  fileStore.singleFileStore('poster').bind(fileStore),
   interceptor.logged.bind(interceptor),
+  fileStore.singleFileStore('poster').bind(fileStore),
   interceptor.authorizedForFilms.bind(interceptor),
   controller.patch.bind(controller)
 );
