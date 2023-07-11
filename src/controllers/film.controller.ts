@@ -98,13 +98,13 @@ export class FilmController extends Controller<Film> {
 
   async deleteById(req: Request, res: Response, next: NextFunction) {
     try {
-      if (!req.body.userToken) {
+      if (!req.body.tokenPayload) {
         throw new Error('No token payload was found');
       }
 
       await this.repo.delete(req.params.id);
 
-      const { id } = req.body.userToken as PayloadToken;
+      const { id } = req.body.tokenPayload as PayloadToken;
       const user = await this.userRepo.queryById(id);
 
       const createdFilm = user.films.findIndex(

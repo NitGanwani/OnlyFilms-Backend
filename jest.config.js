@@ -15,5 +15,6 @@ export default {
     'src/repository/film.m.model.ts',
     'src/routers/film.router.ts',
     'src/controllers/controller.ts',
+    'src/middleware/files.ts',
   ],
 };
