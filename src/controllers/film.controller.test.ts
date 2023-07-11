@@ -61,6 +61,47 @@ describe('Given the FilmController class', () => {
       expect(res.send).toHaveBeenCalled();
     });
 
+    test('Then it should calculate the next page URL if there are more pages', async () => {
+      const controller = new FilmController(mockFilmRepo, mockUserRepo);
+      req.query = { page: '1' };
+
+      mockFilmRepo.count = jest.fn().mockResolvedValue(8);
+      mockFilmRepo.query = jest
+        .fn()
+        .mockResolvedValue([{}, {}, {}, {}, {}, {}]);
+
+      await controller.getAll(req, res, next);
+
+      expect(mockFilmRepo.query).toHaveBeenCalledWith(1, 6);
+      expect(mockFilmRepo.count).toHaveBeenCalled();
+      expect(res.send).toHaveBeenCalled();
+
+      const response = (res.send as jest.Mock).mock.calls[0][0];
+      expect(response.next).toEqual('http://localhost:7777/film?page=2');
+    });
+
+    test('Then it should calculate the next page URL if there are more pages', async () => {
+      const controller = new FilmController(mockFilmRepo, mockUserRepo);
+      const genre = 'Comedy';
+      req.query = { page: '1', genre };
+
+      mockFilmRepo.count = jest.fn().mockResolvedValue(8);
+      mockFilmRepo.query = jest
+        .fn()
+        .mockResolvedValue([{}, {}, {}, {}, {}, {}]);
+
+      await controller.getAll(req, res, next);
+
+      expect(mockFilmRepo.query).toHaveBeenCalledWith(1, 6, genre);
+      expect(mockFilmRepo.count).toHaveBeenCalledWith(genre);
+      expect(res.send).toHaveBeenCalled();
+
+      const response = (res.send as jest.Mock).mock.calls[0][0];
+      expect(response.next).toEqual(
+        `http://localhost:7777/film?genre=${genre}&page=2`
+      );
+    });
+
     test('Then the getById method should be used', async () => {
       const controller = new FilmController(mockFilmRepo, mockUserRepo);
       await controller.getById(req, res, next);
@@ -139,6 +180,20 @@ describe('Given the FilmController class', () => {
       expect(res.status).toHaveBeenCalledWith(204);
       expect(res.send).toHaveBeenCalled();
     });
+
+    test('Then the delete method should throw an error when the token payload is missing', async () => {
+      req.body = {
+        tokenPayload: undefined,
+      };
+      const controller = new FilmController(mockFilmRepo, mockUserRepo);
+      await controller.deleteById(req, res, next);
+
+      expect(mockFilmRepo.delete).not.toHaveBeenCalled();
+      expect(mockUserRepo.queryById).not.toHaveBeenCalled();
+      expect(mockUserRepo.update).not.toHaveBeenCalled();
+
+      expect(next).toHaveBeenCalledWith(expect.any(Error));
+    });
   });
 
   describe('When the methods are called with errors', () => {
@@ -180,11 +235,6 @@ describe('Given the FilmController class', () => {
 
     test('Then the patch method should handle errors', async () => {
       await newController.patch(newReq, newRes, next);
-      expect(next).toHaveBeenCalledWith(error);
-    });
-
-    test('Then the deleteById method should handle errors', async () => {
-      await newController.deleteById(newReq, newRes, next);
       expect(next).toHaveBeenCalledWith(error);
     });
   });
