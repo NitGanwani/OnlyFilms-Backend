@@ -95,4 +95,29 @@ export class FilmController extends Controller<Film> {
       next(error);
     }
   }
+
+  async deleteById(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (!req.body.userToken) {
+        throw new Error('No token payload was found');
+      }
+
+      await this.repo.delete(req.params.id);
+
+      const { id } = req.body.userToken as PayloadToken;
+      const user = await this.userRepo.queryById(id);
+
+      const createdFilm = user.films.findIndex(
+        (item) => item.id === req.params.id
+      );
+      user.films.splice(createdFilm, 1);
+
+      await this.userRepo.update(id, user);
+
+      res.status(204);
+      res.send();
+    } catch (error) {
+      next(error);
+    }
+  }
 }
