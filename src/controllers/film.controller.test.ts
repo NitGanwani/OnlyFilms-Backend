@@ -109,10 +109,35 @@ describe('Given the FilmController class', () => {
     });
 
     test('Then the delete method should be used', async () => {
+      const mockUser = {
+        id: '2',
+        userName: 'Joseba',
+        films: [{ id: '1' }],
+      } as unknown as User;
+
+      mockFilmRepo.delete = jest.fn();
+      mockUserRepo.queryById = jest.fn().mockResolvedValue(mockUser);
+      mockUserRepo.update = jest.fn().mockResolvedValue(mockUser);
+
+      req.body = {
+        userToken: { id: '2' },
+      };
+      req.params = {
+        id: '1',
+      };
+
       const controller = new FilmController(mockFilmRepo, mockUserRepo);
       await controller.deleteById(req, res, next);
+
+      expect(mockFilmRepo.delete).toHaveBeenCalledWith('1');
+      expect(mockUserRepo.queryById).toHaveBeenCalledWith('2');
+      expect(mockUserRepo.update).toHaveBeenCalledWith('2', {
+        ...mockUser,
+        films: [],
+      });
+
+      expect(res.status).toHaveBeenCalledWith(204);
       expect(res.send).toHaveBeenCalled();
-      expect(mockFilmRepo.delete).toHaveBeenCalled();
     });
   });
 
