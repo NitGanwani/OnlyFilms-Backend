@@ -120,7 +120,7 @@ describe('Given the FilmController class', () => {
       mockUserRepo.update = jest.fn().mockResolvedValue(mockUser);
 
       req.body = {
-        userToken: { id: '2' },
+        tokenPayload: { id: '2' },
       };
       req.params = {
         id: '1',
