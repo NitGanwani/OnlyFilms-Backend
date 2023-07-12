@@ -17,7 +17,9 @@ export class UserRepo implements Repository<User> {
   }
 
   async queryById(id: string): Promise<User> {
-    const result = await UserModel.findById(id).exec();
+    const result = await UserModel.findById(id)
+      .populate('films', { id: 0 })
+      .exec();
     if (result === null)
       throw new HttpError(404, 'Not found', 'No user found with this id');
     return result;
@@ -30,7 +32,9 @@ export class UserRepo implements Repository<User> {
     key: string;
     value: unknown;
   }): Promise<User[]> {
-    const result = await UserModel.find({ [key]: value }).exec();
+    const result = await UserModel.find({ [key]: value })
+      .populate('films', { id: 0 })
+      .exec();
     return result;
   }
 
