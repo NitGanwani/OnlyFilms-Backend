@@ -120,4 +120,20 @@ export class FilmController extends Controller<Film> {
       next(error);
     }
   }
+
+  async addComment(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id: userId } = req.body.tokenPayload as PayloadToken;
+      const film = await this.repo.queryById(req.params.id);
+      const user = await this.userRepo.queryById(userId);
+
+      film.comments.push({ comment: req.body.comment, owner: user });
+
+      const updatedPost = await this.repo.update(req.params.id, film);
+
+      res.send(updatedPost);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

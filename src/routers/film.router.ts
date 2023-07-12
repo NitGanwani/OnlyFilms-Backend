@@ -40,3 +40,8 @@ filmRouter.delete(
   interceptor.authorizedForFilms.bind(interceptor),
   controller.deleteById.bind(controller)
 );
+filmRouter.patch(
+  '/addcomment/:id',
+  interceptor.logged.bind(interceptor),
+  controller.addComment.bind(controller)
+);

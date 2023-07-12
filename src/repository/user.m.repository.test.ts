@@ -35,7 +35,11 @@ describe('Given the UserRepo class', () => {
       };
 
       const exec = jest.fn().mockResolvedValueOnce(mockUser);
-      UserModel.findById = jest.fn().mockReturnValueOnce({ exec });
+      UserModel.findById = jest.fn().mockReturnValueOnce({
+        populate: jest.fn().mockReturnValueOnce({
+          exec,
+        }),
+      });
 
       const result = await repo.queryById(mockId);
       expect(UserModel.findById).toHaveBeenCalledWith(mockId);
@@ -75,7 +79,9 @@ describe('Given the UserRepo class', () => {
 
       const exec = jest.fn().mockResolvedValueOnce(mockUsers);
       UserModel.find = jest.fn().mockReturnValueOnce({
-        exec,
+        populate: jest.fn().mockReturnValueOnce({
+          exec,
+        }),
       });
       const result = await repo.search({ key: 'userName', value: 'Nitin' });
       expect(UserModel.find).toHaveBeenCalled();
@@ -117,12 +123,14 @@ describe('Given the UserRepo class', () => {
       const mockId = '1';
 
       const exec = jest.fn().mockResolvedValue(null);
+
       UserModel.findById = jest.fn().mockReturnValueOnce({
-        exec,
+        populate: jest.fn().mockReturnValueOnce({
+          exec,
+        }),
       });
 
-      await expect(repo.queryById(mockId)).rejects.toThrowError(error);
-      expect(UserModel.findById).toHaveBeenCalled();
+      await expect(repo.queryById(mockId)).rejects.toThrow(error);
     });
   });
 

@@ -238,4 +238,53 @@ describe('Given the FilmController class', () => {
       expect(next).toHaveBeenCalledWith(error);
     });
   });
+
+  describe('When it is instantiated and addComment method is called', () => {
+    test('Then it should add a comment to a film and return the updated film', async () => {
+      const mockUser: User = {
+        id: '1',
+        userName: 'Kevin',
+        createdFilm: [],
+      } as unknown as User;
+
+      const mockFilm: Film = {
+        id: '1',
+        title: 'Scarface',
+        owner: '2',
+        comments: [],
+      } as unknown as Film;
+
+      mockUserRepo.queryById = jest.fn().mockResolvedValue(mockUser);
+      mockFilmRepo.queryById = jest.fn().mockResolvedValue(mockFilm);
+      mockFilmRepo.update = jest.fn().mockResolvedValue(mockFilm);
+
+      req.body = {
+        tokenPayload: { id: '1' },
+        comment: 'I want the world chico',
+      };
+      req.params = {
+        id: '1',
+      };
+
+      const controller = new FilmController(mockFilmRepo, mockUserRepo);
+      await controller.addComment(req, res, next);
+
+      expect(mockUserRepo.queryById).toHaveBeenCalledWith('1');
+      expect(mockFilmRepo.queryById).toHaveBeenCalledWith('1');
+      expect(mockFilmRepo.update).toHaveBeenCalledWith('1', mockFilm);
+
+      expect(res.send).toHaveBeenCalledWith(mockFilm);
+    });
+
+    test('Then it should throw an error when the user token is missing', async () => {
+      req.body = {
+        userToken: undefined,
+      };
+
+      const controller = new FilmController(mockFilmRepo, mockUserRepo);
+      await controller.addComment(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(expect.any(Error));
+    });
+  });
 });

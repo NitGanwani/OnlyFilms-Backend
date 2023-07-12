@@ -9,4 +9,10 @@ export type Film = {
   synopsis: string;
   poster: Image;
   owner: User;
+  comments: Comment[];
+};
+
+export type Comment = {
+  comment: string;
+  owner: User;
 };

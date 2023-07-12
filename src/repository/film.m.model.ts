@@ -37,6 +37,15 @@ const filmSchema = new Schema<Film>({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
+  comments: [
+    {
+      comment: { type: String },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    },
+  ],
 });
 
 filmSchema.set('toJSON', {
